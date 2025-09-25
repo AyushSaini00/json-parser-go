@@ -1,6 +1,7 @@
 package tokenizer
 
 import (
+	"fmt"
 	"slices"
 	"unicode"
 )
@@ -123,6 +124,9 @@ func Tokenize(str string) ([]Token, error) {
 
 			continue
 		}
+
+		// if none of the conditions matched, it's an unexpected character
+		return []Token{}, fmt.Errorf("unexpected character: '%c' at position %d", r, i)
 	}
 
 	return tokens, nil

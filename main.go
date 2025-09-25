@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/AyushSaini00/json-parser-go/internal/parser"
 	"github.com/AyushSaini00/json-parser-go/internal/tokenizer"
 )
 
@@ -58,9 +59,16 @@ func parseJSON(input string) error {
 		return err
 	}
 
-	for _, token := range tokens {
-		fmt.Printf("--%s: %s\n", token.Type, token.Value)
+	// for _, token := range tokens {
+	// 	fmt.Printf("--%s: %s\n", token.Type, token.Value)
+	// }
+
+	res, err := parser.ParseTokens(tokens)
+	if err != nil {
+		return err
 	}
+
+	fmt.Printf("%+v\n", res)
 
 	return nil
 }

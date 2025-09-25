@@ -1,6 +1,10 @@
+# JSON Parser
+
 trying to build a smol json-parser in go, part of this challenge: https://codingchallenges.fyi/challenges/challenge-json-parser
 
-approach & pseudocode:
+---
+
+## approach & pseudocode:
 
 - json is made up of objects, arrays, strings, numbers, booleans, and null.
 - ex of a valid json string: `{"name": "Rohan", "interested": ["hiking", "coffee"]}`
@@ -54,6 +58,8 @@ approach & pseudocode:
 
     7. found `]`
     8. found `}` -> json string completed -> it's a valid json
+
+---
 
 build:
 
