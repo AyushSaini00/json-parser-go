@@ -2,6 +2,8 @@
 
 trying to build a smol json-parser in go, part of this challenge: https://codingchallenges.fyi/challenges/challenge-json-parser
 
+current state: tested on all of testData [step1 to step4]
+
 ---
 
 ## approach & pseudocode:

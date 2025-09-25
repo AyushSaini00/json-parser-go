@@ -11,10 +11,27 @@ type Token struct {
 	Value string
 }
 
+const (
+	SYMBOL  = "SYMBOL"
+	STRING  = "STRING"
+	NUMBER  = "NUMBER"
+	BOOLEAN = "BOOLEAN"
+	NULL    = "NULL"
+)
+
+const (
+	OPEN_CURLY_BRACKET   = "{"
+	CLOSE_CURLY_BRACKET  = "}"
+	OPEN_SQUARE_BRACKET  = "["
+	CLOSE_SQUARE_BRACKET = "]"
+	COLON                = ":"
+	COMMA                = ","
+)
+
 func Tokenize(str string) ([]Token, error) {
 	var tokens []Token
 	symbols := []string{
-		"{", "}", "[", "]", ":", ",",
+		OPEN_CURLY_BRACKET, CLOSE_CURLY_BRACKET, OPEN_SQUARE_BRACKET, CLOSE_SQUARE_BRACKET, COLON, COMMA,
 	}
 
 	for i := 0; i < len(str); i++ {
@@ -27,7 +44,7 @@ func Tokenize(str string) ([]Token, error) {
 
 		// symbol check
 		if slices.Contains(symbols, string(r)) {
-			tokens = append(tokens, Token{"SYMBOL", string(r)})
+			tokens = append(tokens, Token{SYMBOL, string(r)})
 			continue
 		}
 
@@ -41,7 +58,7 @@ func Tokenize(str string) ([]Token, error) {
 			}
 
 			strVal := str[startIndex:i]
-			tokens = append(tokens, Token{"STRING", strVal})
+			tokens = append(tokens, Token{STRING, strVal})
 			// no need to skip the closing quote as main loop is incremented
 			continue
 		}
@@ -94,7 +111,7 @@ func Tokenize(str string) ([]Token, error) {
 			}
 
 			numVal := str[startIndex:i]
-			tokens = append(tokens, Token{"NUMBER", numVal})
+			tokens = append(tokens, Token{NUMBER, numVal})
 
 			i-- // because loop will also increase the counter, this is to reset it.
 			continue
@@ -104,14 +121,14 @@ func Tokenize(str string) ([]Token, error) {
 		// check for true
 		if i+3 < len(str) && str[i:i+4] == "true" {
 			// because we would have the type of BOOLEAN associated with bool, i can store boolean as string
-			tokens = append(tokens, Token{"BOOLEAN", "true"})
+			tokens = append(tokens, Token{BOOLEAN, "true"})
 			i += 3 //skip the rest of true
 
 			continue
 		}
 		// check for false
 		if i+4 < len(str) && str[i:i+5] == "false" {
-			tokens = append(tokens, Token{"BOOLEAN", "false"})
+			tokens = append(tokens, Token{BOOLEAN, "false"})
 			i += 4 //skip the rest of false
 
 			continue
@@ -119,7 +136,7 @@ func Tokenize(str string) ([]Token, error) {
 
 		// checking for null
 		if i+3 < len(str) && str[i:i+4] == "null" {
-			tokens = append(tokens, Token{"NULL", "null"})
+			tokens = append(tokens, Token{NULL, "null"})
 			i += 3 //skip the rest of null
 
 			continue

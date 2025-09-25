@@ -44,7 +44,7 @@ func main() {
 	}
 
 	if len(string(fileContentBytes)) == 0 {
-		fmt.Println("Invalid JSON")
+		fmt.Println("Invalid JSON: empty file")
 		os.Exit(1)
 	}
 
@@ -61,8 +61,8 @@ func parseJSON(input string) error {
 		return err
 	}
 
-	// for _, token := range tokens {
-	// 	fmt.Printf("--%s: %s\n", token.Type, token.Value)
+	// for i, token := range tokens {
+	// 	fmt.Printf("%v | %s | %s\n", i, token.Type, token.Value)
 	// }
 
 	res, err := parser.ParseTokens(tokens)
