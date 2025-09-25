@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/AyushSaini00/json-parser-go/internal/tokenizer"
@@ -35,18 +35,18 @@ func main() {
 		defer file.Close()
 	}
 
-	scanner := bufio.NewScanner(file)
-	scanner.Scan()
-	fileContent := scanner.Text()
+	fileContentBytes, err := io.ReadAll(file)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		os.Exit(1)
+	}
 
-	if len(fileContent) == 0 {
+	if len(string(fileContentBytes)) == 0 {
 		fmt.Println("Invalid JSON")
 		os.Exit(1)
 	}
 
-	fmt.Printf("file contents: %v\n", fileContent)
-
-	err = parseJSON(fileContent)
+	err = parseJSON(string(fileContentBytes))
 	if err != nil {
 		os.Exit(1)
 	}
