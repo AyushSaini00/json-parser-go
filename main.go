@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -49,6 +50,7 @@ func main() {
 
 	err = parseJSON(string(fileContentBytes))
 	if err != nil {
+		fmt.Printf("Invalid JSON: %+v\n", err)
 		os.Exit(1)
 	}
 }
@@ -68,7 +70,12 @@ func parseJSON(input string) error {
 		return err
 	}
 
-	fmt.Printf("%+v\n", res)
+	// pretty print the JSON to console
+	jsonData, err := json.MarshalIndent(res, "", "  ") // Indent with two spaces
+	if err != nil {
+		return fmt.Errorf("Error marshalling JSON:", err)
+	}
+	fmt.Println(string(jsonData))
 
 	return nil
 }

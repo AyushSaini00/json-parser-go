@@ -10,52 +10,57 @@ func ParseTokens(tokens []tokenizer.Token) (map[string]any, error) {
 	position := 0
 	obj := make(map[string]any)
 
-	for _, token := range tokens {
-		if token.Type == "SYMBOL" && token.Value == "{" {
-			//start of an object
+	if tokens[position].Value != "{" {
+		return nil, fmt.Errorf("expected {")
+	}
+	position++
+
+	for i := 0; i < len(tokens); i++ {
+
+		if tokens[position].Value == "}" {
+			prev := position - 1
+			if tokens[prev].Value == "," {
+				return nil, fmt.Errorf("trailing comma")
+			}
 
 			position++
-
-			// empty object
-			if tokens[position].Type == "SYMBOL" && token.Value == "}" {
-				position++
-				return obj, nil
-			}
-
-			//if not empty object, key must be present
-			if tokens[position].Type != "STRING" {
-				return nil, fmt.Errorf("expected string key")
-			}
-
-			key := tokens[position].Value
-			position++
-
-			//expect a colon
-			if tokens[position].Value != ":" {
-				return nil, fmt.Errorf("expected a colon")
-			}
-			position++
-
-			//parse the value recursively
-			val, err := parseValue(tokens, &position)
-			if err != nil {
-				return nil, err
-			}
-
-			obj[key] = val
-			position++
-
-			// next token should either be "," or "}"
-			if tokens[position].Value == "," {
-				position++
-				continue
-			} else if tokens[position].Value == "}" {
-				position++
-				break
-			} else {
-				return nil, fmt.Errorf("expected , or }")
-			}
+			break
 		}
+
+		//if not empty object, key must be present
+		if tokens[position].Type != "STRING" {
+			return nil, fmt.Errorf("expected string key")
+		}
+
+		key := tokens[position].Value
+		position++
+
+		//expect a colon
+		if tokens[position].Value != ":" {
+			return nil, fmt.Errorf("expected a colon")
+		}
+		position++
+
+		//parse the value recursively
+		val, err := parseValue(tokens, &position)
+		if err != nil {
+			return nil, err
+		}
+
+		obj[key] = val
+		position++
+
+		// next token should either be "," or "}"
+		if tokens[position].Value == "," {
+			position++
+			continue
+		} else if tokens[position].Value == "}" {
+			position++
+			break
+		} else {
+			return nil, fmt.Errorf("expected , or }")
+		}
+
 	}
 
 	return obj, nil
